@@ -65,8 +65,34 @@
         let show = a=>a*2
 ##### 函数的参数
 - 参数的展开/扩展
-    >
+    > 作用：
+    > 1. 收集剩余的参数,其中Rest Parameter（args）只能放在最后
+        let show = function(a,b,...args){
+            console.log(args)
+        }
+        show(1,2,3,4,5)
+        输出：1,2,3,4,5
+    > 2. 展开数组，展开后的效果就跟数组内容直接写出来一样
+        let arr1 = [1,2,3];
+        let arr2 = [4,5,6];
+        let arr3 = [...arr1,...arr2]
+        console.log(arr3)
+        输出：[1,2,3,4,5,6]
+    一起使用：
+        function show(...args){
+            fn(...args)
+        }
+        function fn(a,b){
+            console.log(a+b)
+        }
+        show(2,3)
+        输出：5
 - 默认参数
+        function show(a,b=1,c=2){
+            console.log(a,b,c)
+        }
+        show(2,3)
+        输出:2,3,2
 ### 数组
 ### 字符串
 ### 面向对象

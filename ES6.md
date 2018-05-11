@@ -1,7 +1,78 @@
 [TOC]
-## 0416
+****
+## 简介
 
-### 常用DOS命令
+### 兼容性
+- IE10+，Chrome，FireFox，移动端，NodeJS
+- 若不支持可以编译或者转换
+    - 在线转换
+    - 提前编译
+        > 可以使用babel或者引用browser.js（一个东西）
+        > 引用browser.js时script标签的type属性为“text/babel”（属于在线转换）
+
+### 变量
+##### ES6之前的缺陷
+- 没有块级作用域
+- var可以重复声明
+- 无法限制修改（没有常量定义）
+##### 6的改进
+- 不能重复声明
+- let变量
+- const常量
+- 增加块级作用域
+        for (var i = 0; i < 5; i++) {
+            setTimeout(function() {
+                console.log(i);
+            }, 1000);
+        }
+    输出：5 -> 5 -> 5 -> 5 -> 5
+        for (let i = 0; i < 5; i++) {
+            setTimeout(function() {
+                console.log(new Date, i);
+            }, 1000);
+        }
+    输出：0 -> 1 -> 2 -> 3 -> 4
+    也可以使用闭包：
+        for (var i = 0; i < 5; i++) {
+            (function(i){
+                setTimeout(function() {
+                    console.log(new Date, i);
+                }, 1000);
+            })(i)
+        }
+    输出：0 -> 1 -> 2 -> 3 -> 4
+
+### 函数
+##### 箭头函数
+- 基本格式：()=>{}
+    > 如果只有一个参数，'()'可以省
+    > 如果只有一个return，'{}'可以省
+        window.onload = ()=>{
+            alert(1)
+        }
+    等价于
+        window.onload = function(){
+            alert(1)
+        }
+    ep：数组排序
+        let arr = [1,9,78,-8,56];
+        arr.sort((a,b)=>{
+            return a-b
+        });
+        console.log(arr)
+    输出：-8,1,9,56,78
+    ep:简写
+        let show = a=>a*2
+##### 函数的参数
+- 参数的展开/扩展
+    >
+- 默认参数
+### 数组
+### 字符串
+### 面向对象
+### Promise
+### yield（generator）
+### 模块化
 
 > d: 切换盘符
 > dir 列出当前目录下的文件以及文件夹

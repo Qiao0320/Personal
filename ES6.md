@@ -1,6 +1,5 @@
 [TOC]
-****
-## 简介
+## 
 
 ### 兼容性
 - IE10+，Chrome，FireFox，移动端，NodeJS
@@ -93,201 +92,271 @@
         }
         show(2,3)
         输出:2,3,2
+##### 解构赋值
+- 左右两边解构必须一样
+- 右边必须是合法的解构
+- 声明和赋值不能分开，必须在一句话里完成
+    ep:
+        let [a,b,c] =  [1,2,3]
+        let {a,b,c} = {a:1,b:2,c:3}
+        let [{a,b},[n1,n2],num,str] = [{a:3,b:4},[4,5],1,'sss']
 ### 数组
+##### map（映射）
+- 一个对一个
+        let result = arr.map(function(item){
+            return item*2
+        })
+    > 等价于
+        let result = arr.map(item=>item*2)
+    > ep:
+        let score = [19,85,99,25,90]
+        let result = score.map(item=>item>=60?'及格':'不及格')
+        console.log(result)
+    > 输出：[ "不及格", "及格", "及格", "不及格", "及格" ]
+##### reduce（汇总）
+- 一堆变一个
+    > 求和：
+        let arr = [19,85,99,25,90,456]
+        let result = arr.reduce(function(tmp,item,index){
+            return tmp+item
+        })
+        console.log(result)
+    > 输出：774
+    > 参数tmp：中间值
+    > 求平均数：
+    >    const arrayAverage = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length;
+        console.log(arrayAverage([1,2,3]))
+    > 输出：2
+##### filter（过滤器）
+- 留一部分删一部分
+    > 保留能被3整除的数
+        let result = (arr)=>arr.filter(item=>item%3==0)
+        console.log(result([2,89,56,45,111]))
+    > 输出：[45,111]
+##### forEach（循环、迭代）
 ### 字符串
+##### startsWith
+##### endWith
+##### 字符串链接（``）
+        let title = '标题'
+        let str = `<div>
+                    <p>{title}</p>
+                </div>`
 ### 面向对象
-### Promise
+##### 对象
+- 原先的面向对象
+        function User(name,pass){
+            this.name = name;
+            this.pass = pass;
+        }
+        User.prototype.showName=function(){
+            console.log(this.name)
+        }
+        User.prototype.showPass=function(){
+            console.log(this.pass)
+        }
+        var ul = new User('blue','123456')
+        ul.showName();
+        ul.showPass();
+    > 输出：blue 123456
+- 现在的
+        class User{
+            constructor(name,pass){
+                this.name = name;
+                this.pass = pass;
+            }
+            showName(){
+                console.log(this.name)
+            }
+            showPass(){
+                console.log(this.pass)
+            }
+        }
+        var ul = new User('blue','123456')
+        ul.showName();
+        ul.showPass();
+    > 输出：blue 123456
+- 增加class关键字，构造器和类分开了，class里面直接加方法
+##### 继承
+- 原先的继承（call）
+    > ep：继承User
+        function VipUser(name,pass,level){
+            User.call(this,name,pass)
+            this.level = level
+        }
+        VipUser.prototype = new User()
+        VipUser.prototype.constructor = VipUser
+        VipUser.prototype.showLevel = function(){
+            console.log(this.level)
+        }
+        var ul = new VipUser('blue','123456','3')
+        ul.showName();
+        ul.showPass();
+        ul.showLevel();
+- 现在（super）
+        class VipUser extends User{
+            constructor(name,pass,level){
+                super(name,pass)
+                this.level = level
+            }
+            showLevel(){
+                console.log(this.level)
+            }
+        }
+##### 以React为例
+- 组件化
+- 以来JSX==babel==browser.js
+        <div id="root"></div>
+        <script type="text/babel">
+        class Item extends React.Component{
+            constructor(...args){
+                super(...args)
+            }
+            render(){
+                return <li>{this.props.str}</li>
+            }
+        }
+        class List extends React.Component{
+            constructor(...args){
+                super(...args)
+            }
+            render(){
+                let aItems=[];
+                for(let i=0;i<this.props.arr.length;i++){
+                    aItems.push(<Item str={this.props.arr[i]}></Item>)
+                }
+                return <ul>{aItems}</ul>
+            }
+        }
+        ReactDOM.render(
+            <List arr={['a123','b123','c123']}></List>,
+            document.getElementById('root')
+        );
+        </script>
+> List的render可以改为
+        render(){
+            let aItems=this.props.arr.map(a=><Item str={a}></Item>)
+            return <ul>{aItems}</ul>
+        }
+    或者
+        render(){
+            return <ul>{this.props.arr.map(a=><Item str={a}></Item>)}</ul>
+        }
+### json
+##### JSON对象
+- json的标准写法：
+    - 1.只能用双引号
+    - 2.所有的名字(key)都必须用引号包起来
+- JSON.stringify
+- JSON.parse
+##### JSON简写
+- 名字一样可以简写
+        let a = 3
+        let b = 5
+        let json = {a,b}
+- 函数
+        show(){
+            console.log(this.a)
+        }
+### Promis
+##### 异步和同步
+- 异步：操作之间没有关系，可以同时进行多个操作
+    > 使代码更复杂
+- 同步：操作之间是相关的，同时只能做一件事
+    > 代码简单
+##### Promise--消除异步操作
+- 用同步的方式，书写异步代码
+- Promise.all
+        function creatPromise(url){
+            let p = new Promise(function (resolve,reject){
+                $.ajax({
+                    url:url,
+                    dataType:'json',
+                    succecc(arr){
+                        resolve(arr)
+                    },
+                    erroe(err){
+                        reject(err)
+                    }
+                })
+            })
+        }
+        Promise.all([
+            creatPromise('./test1.text'),'./test2.text'].then(function(arr){
+            let [res1,res2]=arr
+            alert('成功')
+        },function(){
+            alert('失败')
+        }))
+- Promise.race
+        Promise.race([
+            $.ajax({url:'ddd'}),
+            $.ajax({url:'aaa'}),
+            ])
 ### yield（generator）
-### 模块化
+- generator(生成器)
+- 普通函数一路执行到底，generator函数中间可以停下来
+        function *show(){
+            alert('a')
+            //这里停止
+            yield
+            alert('b')
+        }
+        let genObj = show()
+        //执行到第一个yield即停
+        genObj.next()
+        genObj.next()
+- yield(放弃)：既可以传参，又可以返回
+        function *show(){
+            alert('a')
+            let a = yield
+            alert('b')
+            alert(a)
+        }
+        let gen = show()
+        gen.next(12)
+        gen.next(5)
+    > 输出json对象{"done":false,"value":12},{"done":false,"value":12}
+        function *炒菜(新鲜的菜){
+            洗菜-->洗好的菜
+            let 干净的菜 = yield 洗好的菜
+            干净的菜--> 切-->丝
+            let 切好的菜 = yield 丝
+            切好的菜-->炒--> 熟菜
+            return 熟菜
+        }
+- 异步操作
+    - 回调
+    - Promise
+    - generator
+    - Promise和generator的比较
+    > 带逻辑的Promise
+        Promise.all([
+            $.ajax({url:'getUserData',dataType:'json'})
+        ]).then(result=>{
+            let userData = result[0]
+            if(userData.type=='VIP'){
+                Promise.all([
+                    $.ajax({url:'getVipItems',dataType:'jaon'})
+                ]).then(result=>{
+                    let vipItems = result[0]
+                    //数据处理，显示等等
+                },err=>{
+                    alert('错了')
+                })
+            }
+        },err=>{
+            alert('错了')
+        })
+    > 带逻辑的generator
+        runner(function *(){
+            let userData = yield $.ajax({url:'getUserData',dataType:'json'})
+            if(userData.type=='VIP'){
+                let vipItems = yield $.ajax({url:'getVipItems',dataType:'jaon'})
+            }
+        })
+    > 很明显generator更简单，Promise更适合一次性发出许多请求，generator更适合处理带逻辑的请求
+### 复习
 
-> d: 切换盘符
-> dir 列出当前目录下的文件以及文件夹
-> md 创建目录
-> rd 删除目录
-> cd.. 返回上一级
-> del  del a.txt del *.txt(删除后缀名为txt的文件)
 
-### JAVA发展
-
-- Java Development Kit
-- Java 2 SDk
-- Java 语言平台版本
-    > J2SE  标准版
-    > J2ME  小型版
-    > J2EE  企业版
-
-#### 特点
-- 跨平台（不同操作系统上有JAVA虚拟机JVM即可运行）也称为可移植性
-
-#### JRE（JAVA Runtime Environment）
-- 包括JAVA虚拟机（JVM）和JAVA程序所需的核心类库等等
-
-#### JDK
-- 开发环境，包含开发工具，也包括JRE
-
-##0418
-
-### 命名规则
-
-- 包：全部小写
-- 类或者接口：
-    > 一个单词：首字母必须大写
-    > 多个单词：每个字母首字母必须大写
-- 方法或者变量
-    > 一个单词：首字母小写
-    > 多个单词：从第二个单词开始每个单词首字母大写
-- 常量
-    > 一个单词：全部大写
-    > 多个单词：每个字母都大写   用下划线隔开
-
-### 数据类型
-
-- java是一种强类型的语言，针对每一种数据都定义了明确的数据类型
-- 数据类型分类
-    > 整数：byte（1字节），short（2），int（4），long（8）
-    > 浮点数：float（4），double（8）
-    > 字符：char（2）
-    > 布尔：boolean
-
-### 数据类型转换
-- 默认转换：
-    - byte，short，char-int-long-folat-doble
-    - byte，short，char之间不转换，参与运算是首先转化为int类型
-- 强制转换：byte c = (byte)(a+b)
-- float表示的数据范围比long大
-- java采用Unicode编码
-
-### 访问修饰符区别
-    作用域 | 当前类 | 同包 | 子类 | 其他
-    - | :-: | :-: | :-: | :-: | :-: 
-    public | √ |  √ |  √ |  √ | 
-    protected | √ |  √ |  √ | X | 
-    default | √ |  √ |  X |  X | 
-    private | √ |  X |  X |  X | 
-
-### 面向对象特征
-- 封装
-- 继承
-- 多态
-
-### 参数传递
-- 只有值传递
-- 基本类型：形参不影响实参
-- 引用类型：不影响
-
-### 成员变量和局部变量
-- 在类中位置不同，前者在方法外，后者在方法中
-- 在内存中位置不同，前者在堆内存，后者在栈内存
-- 生命周期不同，前者随着对象的创建而存在，随着对象的消失而消失；后者随着方法的调用完毕而消失
-- 初始化值不同，前者有默认初始化值，后者默认初始化值，必须定义数值才能使用
-
-### 封装
-- 定义：隐藏对象的属性和实现细节，仅提供对外公共访问方式
-- 好处：提高代码复用性以及安全性
-
-### this
-- 当前类的对象引用
-- 方法被哪个对象调用，this就指哪个对象
-- 场景：解决局部变量隐藏成员变量
-
-### 构造方法
-- 给对象的数据进行舒适化
-- 格式：方法名与类名相同，没有返回值类型甚至没有void，没有具体的返回值
-- 注意事项：
-    > 如果我没有给出构造方法，系统会自动提供一个无参构造方法
-    > 如果有，会被覆盖
-
-## 0420
-
-### static
-- 特点：
-    > 随着类的加载而加载
-    > 优先于对象存在
-    > 被类的所有对象共享
-    > 可以通过类名调用  也可以通过对象名调用（推荐使用类名调用） 静态修饰的内容一般称为与类相关的即类成员
-- ​注意事项：
-    > 静态方法中没有this关键字，无法引用非静态变量
-    > 静态方法只能访问静态的成员变量和静态的成员方法，静态只能访问静态，费静态可以访问一切
-### main方法
-- public：公共的
-- static：静态的。不需要创建对象，不需要创建对象，方便JVM的调用
-- void：无返回值
-- main：是一个常见的方法入口，几乎所有语言都是以main作为入口
-- string[] args：是一个字符串数组
-### Q & A
-- Q:String 是最基本的数据类型吗？
-    > 不是。Java中的基本数据类型只有8个：byte、short、int、long、float、double、char、boolean；
-    > 除了基本类型（primitive type）和枚举类型（enumeration type），剩下的都是引用类型（reference type）。
-- Q:&和&&的区别？
-    > &运算符有两种用法：(1)按位与；(2)逻辑与。&&运算符是短路与运算;
-    > &&之所以称为短路运算是因为，如果&&左边的表达式的值是false，右边的表达式会被直接短路掉，不会进行运算。
-- Q:解释内存中的栈(stack)、堆(heap)和静态区(static area)的用法。
-    > 通常我们定义一个基本数据类型的变量，一个对象的引用，还有就是函数调用的现场保存都使用内存中的栈空间；
-    > 而通过new关键字和构造器创建的对象放在堆空间；
-    > 程序中的字面量（literal）如直接书写的100、”hello”和常量都是放在静态区中；
-    > 栈空间操作起来最快但是栈很小，通常大量的对象都是放在堆空间，理论上整个内存没有被其他进程使用的空间甚至硬盘上的虚拟内存都可以被当成堆空间来使用。
-        String str = new String("hello");
-    > 上面的语句中变量str放在栈上，用new创建出来的字符串对象放在堆上，而”hello”这个字面量放在静态区。
-
-### 开发原则
-- 低耦合，高内聚
-    > 类与类的关系
-    > 内聚：自己完成某件事的能力
-### 继承
-- 多个类中存在相同的属性和行为时，将这些内容抽取到单独的一个类中，那么多个类无需再定义这些属性和行为，只要继承那个类即可。
-- 关键字：extends
-- 格式： class 子类名 extends 父类名
-- 好处:
-    > 提高代码复用性
-    > 提高代码维护性
-    > 让类与类产生了关系，是多态的前提
-- 弊端：
-    > 类的耦合性增强
-- 特点
-    > java只支撑单继承，不支持多继承（C++支持多继承）
-    > java 支持多层继承（继承体系）
-- 注意事项
-    > 子类只能继承父类的所有非私有的成员
-    > 子类不能继承父类的构造方法，但是可以通过super关键字去访问父类构造方法
-- 继承中成员变量的关系
-    > 子类与父类的成员变量名称不一样可以共存
-    > 一样的话，顺序就近先子后父
-- 继承中构造方法的关系
-    > 子类中所有的构造方法默认都会访问父类的无参构造方法
-    > 一样的话，顺序就近先子后父
-- super
-    > super代表父类存储空间的表示（理解为父类引用，可以操作父类的成员）
-- 方法重写Override
-    - 定义：子类中出现和父类中方法一模一样的方法
-    - 注意事项：
-        > 父类中私有方法不能被重写
-        > 子类重写父类方法时，访问权限不能更低
-        > 父类中的静态方法，重写是必须也是静态方法
-
-- 方法重载Overload
-    > 本类中出现的方法名一样，参数列表不同的方法，与返回值无关
-- final
-    > 修饰类，方法，变量
-    > 若修饰类，无法继承
-    > 若修饰方法，不能被重写
-- Q: final修饰局部变量的问题
-    > final可以修饰局部变量，修饰基本类型时值不能变，修饰引用类型时地址值不能变
-- 多态
-    - 定义：某一个食物，在不同时刻表现出来的不同状态
-    - 前提：
-        > 要有继承关系
-        > 要有方法重写
-        > 要有父类引用指向子类对象 父f=new 子（）
-    - 多态中的成员访问特点
-        > 成员变量：编辑看左边，运行看左边
-        > 构造方法：创建子类的时候访问父类的构造方法
-        > 成员方法：编辑看左边，运行看右边
-        > 静态方法：编辑看左边，运行看左边，静态和类相关，算不上重写
-    - 好处
-        > 提高了代码的维护性
-        > 提高了代码的扩展性
-    - 弊端
-        > 不能使用子类的特有功能
-        > 若想用，把父类引用强制转换为子类的引用（向下转型）
-    - 测试
 

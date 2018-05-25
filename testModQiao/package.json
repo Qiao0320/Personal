@@ -1,0 +1,14 @@
+{
+  "name": "testmodqiao",
+  "version": "1.0.0",
+  "description": "是一个测试模块，不要下载哦",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "qiao"
+  ],
+  "author": "qiao",
+  "license": "ISC"
+}

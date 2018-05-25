@@ -1,27 +1,36 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-    </body>
-    
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript">
-    var aBtn = document.getElementsByTagName('button');
-    function show(a,b=1,c=2){
-        console.log(a,b,c)
-    }
-    show(2,3)
-    // let arr = [1,2,3]
-    // let show = function(a,b,c){
-    //     console.log(a)
-    //     console.log(b)
-    //     console.log(c)
-    // }
-    // show(...arr)
+    runner(function *(){
+        let userData = yield $.ajax({url:'getUserData',dataType:'json'})
+        if(userData.type=='VIP'){
+            let vipItems = yield $.ajax({url:'getVipItems',dataType:'jaon'})
+        }
+    })
+    Promise.all([
+        $.ajax({url:'getUserData',dataType:'json'})
+    ]).then(result=>{
+        let userData = result[0]
+        if(userData.type=='VIP'){
+            Promise.all([
+                $.ajax({url:'getVipItems',dataType:'jaon'})
+            ]).then(result=>{
+                let vipItems = result[0]
+                //数据处理，显示等等
+            },err=>{
+                alert('错了')
+            })
+        }
+    },err=>{
+        alert('错了')
+    })
     </script>
-    </html>
+  </body>
+</html>

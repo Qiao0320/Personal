@@ -124,7 +124,7 @@
     > 输出：774
     > 参数tmp：中间值
     > 求平均数：
-    >    const arrayAverage = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length;
+    >   ` const arrayAverage = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length;`
         console.log(arrayAverage([1,2,3]))
     > 输出：2
 ##### filter（过滤器）
@@ -258,7 +258,7 @@
         show(){
             console.log(this.a)
         }
-### Promis
+### Promise
 ##### 异步和同步
 - 异步：操作之间没有关系，可以同时进行多个操作
     > 使代码更复杂

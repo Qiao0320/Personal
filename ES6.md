@@ -19,27 +19,33 @@
 - let变量
 - const常量
 - 增加块级作用域
-        for (var i = 0; i < 5; i++) {
-            setTimeout(function() {
-                console.log(i);
-            }, 1000);
-        }
-    输出：5 -> 5 -> 5 -> 5 -> 5
-        for (let i = 0; i < 5; i++) {
-            setTimeout(function() {
-                console.log(new Date, i);
-            }, 1000);
-        }
-    输出：0 -> 1 -> 2 -> 3 -> 4
-    也可以使用闭包：
-        for (var i = 0; i < 5; i++) {
-            (function(i){
-                setTimeout(function() {
-                    console.log(new Date, i);
-                }, 1000);
-            })(i)
-        }
-    输出：0 -> 1 -> 2 -> 3 -> 4
+```javascript
+for (var i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log(i);
+    }, 1000);
+}
+输出：5 -> 5 -> 5 -> 5 -> 5
+```
+```javascript   
+for (let i = 0; i < 5; i++) {
+    setTimeout(function() {
+        console.log(new Date, i);
+    }, 1000);
+}
+输出：0 -> 1 -> 2 -> 3 -> 4
+```
+也可以使用闭包：
+```javascript
+for (var i = 0; i < 5; i++) {
+    (function(i){
+        setTimeout(function() {
+            console.log(new Date, i);
+        }, 1000);
+    })(i)
+}
+输出：0 -> 1 -> 2 -> 3 -> 4
+```
 
 ### 函数
 ##### 箭头函数

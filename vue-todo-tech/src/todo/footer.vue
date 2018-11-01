@@ -22,7 +22,7 @@ export default {
   text-align center
   color: #bfbfbf
   font-size: 20px
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)s
 
 </style>
 
